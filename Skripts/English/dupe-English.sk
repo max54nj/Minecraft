@@ -1,11 +1,14 @@
 #-----------------------------------------------------------------------#
-#	Lifeforabit Server Skript >>> 
+#	>>> Dupe <<<
 #-----------------------------------------------------------------------#
 #	Author:		Max54nj
 #	Version:	1.0
+#	Github:		https://github.com/max54nj/Minecraft/tree/main/Skripts
+#	Spigot:		https://www.spigotmc.org/members/max54nj.1567908/
+#	Bukkit:		https://dev.bukkit.org/members/max54nj/projects
 #-----------------------------------------------------------------------#
 options:
-	prefix: &6LifeForABit &f|>
+	prefix: &6Dupe &f|>
 	perm: {@prefix} &7> &cYou don't have permission to do this!
 #-----------------------------------------------------------------------#
 
