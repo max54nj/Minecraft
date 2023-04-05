@@ -1,0 +1,55 @@
+#-----------------------------------------------------------------------#
+#	Lifeforabit Server Skript >>> 
+#-----------------------------------------------------------------------#
+#	Author:		Max54nj
+#	Version:	1.0
+#-----------------------------------------------------------------------#
+options:
+	prefix: &6LifeForABit &f|>
+	perm: {@prefix} &7> &cYou don't have permission to do this!
+#-----------------------------------------------------------------------#
+
+command /dupe [<text>]:
+	trigger:
+		if arg 1 is not set:
+			if {dupe} is true:
+				if {dupe.blocked::*} contains player's tool:
+					send "{@prefix} &cYou can't dupe this item!"
+					stop
+				else:
+					give player's tool to player
+			else:
+				send "{@prefix} &cDuping has been disabled!"
+				stop
+			
+		if arg 1 is "toggle":
+			if player has permission "sk.dupe.toggle":
+				if {dupe} is true:
+					set {dupe} to false
+					stop
+				else:
+					set {dupe} to true 
+					stop
+		if arg 1 is "block":
+			if player has permission "sk.dupe.block":
+				if {dupe.blocked::*} contains player's tool:
+					send "{@prefix} &c%player's tool% has already been blocked"
+					stop
+				else:
+					add player's tool to {dupe.blocked::*}
+					send "{@prefix} &2%player's tool% &ahas been blocked sucesfully."
+					stop
+				
+			
+			
+		if arg 1 is "unblock":
+			if player has permission "sk.dupe.unblock":
+				if {dupe.blocked::*} contains player's tool:
+					remove player's tool from {dupe.blocked::*}
+					send "{@prefix} &2%player's tool% &ahas been unblocked sucesfully."
+					stop
+					
+				else:
+					send "{@prefix} &c%player's tool% has already been unblocked"
+					stop
+					
