@@ -1,0 +1,146 @@
+#-----------------------------------------------------------------------#
+#	>>> Autobroadcast <<<
+#-----------------------------------------------------------------------#
+#	Author:		Max54nj
+#	Version:	1.0
+#	Github:		https://github.com/max54nj/Minecraft/tree/main/Skripts
+#	Spigot:		https://www.spigotmc.org/members/max54nj.1567908/
+#	Bukkit:		https://dev.bukkit.org/members/max54nj/projects
+#-----------------------------------------------------------------------#
+options:
+	p: &6Autobroadcast &f| 
+	perm: {@p} &7> &cDu hast keine Berechtigung dafür!
+#-----------------------------------------------------------------------#
+
+command /autobroadcast [<text>] [<number>] [<number>] [<text>]:
+	Aliases: abroadcast, abc
+	Permission: sk.autobroadcast
+	Permission message: {@perm}
+	trigger:
+		if arg 1 is "help" or "hilfe" or "?":
+			send "&8&m+------------------------***------------------------+"
+			send "   &cBenutze: /abc <arg>                              <link:https://github.com/max54nj/Minecraft/wiki/AutoBroadcast>&a&lWIKI<r>"
+			send " "
+			send "- &6<tooltip:/abc add *ID*          &3Made by Max54nj><suggest command:/abc add >&6/abc add *ID*<r> &8> &7Füge einen Broadcast hinzu. (ID = Zahl zwischen 1 und 10)"
+			send " "
+			send "- &6<tooltip:/abc edit *ID* *Zeile* *Text*          &3Made by Max54nj><suggest command:/abc edit >&6/abc edit *ID* *Zeile* *Text*<r> &8> &7Überschreibe oder füge eine Zeile hinzu. (max. 3 Zeilen)"
+			send " "
+			send "- &6<tooltip:/abc remove *ID*          &3Made by Max54nj><suggest command:/abc remove >&6/abc remove *ID*<r> &8> &7Entferne einen Broadcast."
+			send " "
+			send "- <tooltip:/abc ?          &3Made by Max54nj><cmd:/abc ?>&6/abc ?<r> &8> &7Zeigt dir eine Liste aller Commands"
+			send " "
+			send "- <tooltip:/abc toggle          &3Made by Max54nj><cmd:/abc toggle>&6/abc toggle<r> &8> &7Schaltet Autobroadcast aus/an."
+			send " "
+			send "&3Made by <link:https://max54nj.de/>&3&lMax54nj<r> &8> <link:https://github.com/max54nj/Minecraft/tree/main/Skripts>&8&lGithub<r> &8- <link:https://www.spigotmc.org/members/max54nj.1567908/>&6&lSpigot<r> &8- <link:https://dev.bukkit.org/members/max54nj/projects>&9&lBukkit<r>"
+			send "&8&m+------------------------***------------------------+"
+			stop
+			
+#-----------------------------------------------------------------------#
+			
+		if arg 1 is "add":
+			if {abc.allowed.ids%arg-2%} = arg 2:
+				add arg-2 to {abc.bc::*}
+				set {abc.%arg-2%.1} to " "
+				set {abc.%arg-2%.2} to " "
+				set {abc.%arg-2%.3} to " "
+				send "{@p} &aBroadcast &2%arg-2% &awurde erfolgreich erstellt."
+				stop
+				
+			else:
+				send "{@p} &cGib eine gültige ID an! (1-10)"
+				stop
+				
+#-----------------------------------------------------------------------#
+				
+		if arg 1 is "edit":
+			if {abc.bc::*} contains arg-2:
+				if {abc.allowed.lines%arg-3%} = arg 3:
+					if arg 4 is set:
+						set {abc.%arg-2%.%arg-3%} to arg-4
+						send "{@p} &aZeile &2%arg-3% &awurde erfolgreich zu &2Broadcast %arg-2% &ahinzugefügt." 
+						stop
+						
+				else:
+					send "{@p} &cGib eine Zeile an (1-3)"
+					stop
+					
+			else:
+				send "{@p} &cGib eine gültige ID an!"
+				stop
+			
+#-----------------------------------------------------------------------#
+			
+		if arg 1 is "remove":
+			if {abc.bc::*} contains arg-2:
+				remove arg-2 from {abc.bc::*}
+				set {abc.%arg-2%.1} to " "
+				set {abc.%arg-2%.2} to " "
+				set {abc.%arg-2%.3} to " "
+				send "{@p} &2Broadcast %arg-2% &awurde erfolgreich entfernt." 
+				stop
+				
+			else:
+				send "{@p} &cGib eine gültige ID an!"
+				stop
+				
+#-----------------------------------------------------------------------#
+			
+		if arg 1 is "toggle":
+			if {announce} is true:														       
+				set {announce} to false														   
+				message "{@p} &aAutoBroadcast wurde &4Deaktiviert"	
+				stop
+				
+			else:																			   
+				set {announce} to true														   
+				message "{@p} &aAutoBroadcast wurde &2Aktiviert"
+				stop
+				
+#-----------------------------------------------------------------------#
+			
+		else:
+			execute player command "abc help"
+			stop
+		
+#-----------------------------------------------------------------------#			
+		
+on load:
+	set {abc.allowed.ids1} to 1
+	set {abc.allowed.ids2} to 2
+	set {abc.allowed.ids3} to 3
+	set {abc.allowed.ids4} to 4
+	set {abc.allowed.ids5} to 5
+	set {abc.allowed.ids6} to 6
+	set {abc.allowed.ids7} to 7
+	set {abc.allowed.ids8} to 8
+	set {abc.allowed.ids9} to 9
+	set {abc.allowed.ids10} to 10
+	set {abc.allowed.lines1} to 1
+	set {abc.allowed.lines2} to 2
+	set {abc.allowed.lines3} to 3
+			   
+#------------------------------------------------------------------------------------------#
+
+every 10 minutes:																	   
+	if {announce} is true:																   
+		set {rand} to a random integer between 1 and 10	               
+
+		if {last_Rand} is not set:														  
+			set {last_Rand} to {rand}													   
+		else if {last_Rand} is set:														   
+			while {last_Rand} is equal to {rand}:										   
+				set {rand} to a random integer between 1 and 10               
+			if {rand} is not equal to {last_Rand}:										   
+				set {last_Rand} to {rand}												   
+
+	else:																				   
+		stop trigger																	   
+	
+	if {abc.bc::*} contains {rand}:
+		broadcast "<tooltip:&3Made by Max54nj>&8&m+<r>&8&m---------------***---------------+"
+		broadcast " " 
+		broadcast "%{abc.%{rand}%.1}%"
+		broadcast "%{abc.%{rand}%.2}%"
+		broadcast "%{abc.%{rand}%.3}%"
+		broadcast " "
+		broadcast "<tooltip:&3Made by Max54nj>&8&m+<r>&8&m---------------***---------------+"
